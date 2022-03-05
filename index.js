@@ -64,7 +64,7 @@ const promptUser = () => {
 
 // View All Employees
 const viewAllEmployees = employeeTable => {
-    let sql =   `SELECT employee.id, 
+    const sql =   `SELECT employee.id, 
                 employee.first_name, 
                 employee.last_name, 
                 role.title, 
@@ -78,6 +78,31 @@ const viewAllEmployees = employeeTable => {
         if (error) throw error;
         console.log("Viewing Employees:")
         console.table(response);
+        promptUser();
     });
 };
+
+// View all roles in company
+const viewAllRoles = () => {
+    console.log("Employee Roles:");
+    const sql =     `SELECT role.id, role.title, department.name AS department
+                    FROM role
+                    INNER JOIN department ON role.department_id = department.id`;
+    connection.query(sql, (error, response) => {
+      if (error) throw error;
+        response.forEach((role) => {console.log(role.title);});
+        promptUser();
+    });
+  };
+  
+  // View all Departments
+  const viewAllDepartments = () => {
+    const sql =   `SELECT department.id AS id, department.name AS department FROM department`; 
+    connection.query(sql, (error, response) => {
+      if (error) throw error;
+      console.log("All Departments:");
+      console.table(response);
+      promptUser();
+    });
+  };
 
