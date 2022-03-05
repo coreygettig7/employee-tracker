@@ -76,21 +76,27 @@ const viewAllEmployees = employeeTable => {
                 ORDER BY employee.id ASC`;
     connection.query(sql, (error, response) => {
         if (error) throw error;
+        console.log("*********************************************")
         console.log("Viewing Employees:")
+        console.log("*******************")
         console.table(response);
+        console.log("*********************************************")
         promptUser();
     });
 };
 
 // View all roles in company
 const viewAllRoles = () => {
-    console.log("Employee Roles:");
     const sql =     `SELECT role.id, role.title, department.name AS department
-                    FROM role
-                    INNER JOIN department ON role.department_id = department.id`;
+    FROM role
+    INNER JOIN department ON role.department_id = department.id`;
     connection.query(sql, (error, response) => {
-      if (error) throw error;
-        response.forEach((role) => {console.log(role.title);});
+        if (error) throw error;
+        console.log("*********************************************")
+        console.log("Employee Roles:");
+        console.log("****************")
+        response.forEach((role) => {console.log("- " + role.title);});
+        console.log("*********************************************")
         promptUser();
     });
   };
@@ -100,9 +106,30 @@ const viewAllRoles = () => {
     const sql =   `SELECT department.id AS id, department.name AS department FROM department`; 
     connection.query(sql, (error, response) => {
       if (error) throw error;
+      console.log("*********************************************")
       console.log("All Departments:");
       console.table(response);
+      console.log("*********************************************")
       promptUser();
     });
+  };
+
+// View employees by department
+const viewEmployeesByDepartment = () => {
+    const sql =     `SELECT employee.first_name, 
+                    employee.last_name, 
+                    department.name AS department
+                    FROM employee 
+                    LEFT JOIN role ON employee.role_id = role.id 
+                    LEFT JOIN department ON role.department_id = department.id`;
+    connection.query(sql, (error, response) => {
+        if (error) throw error;
+        console.log("*********************************************")
+        console.log("Employees by Department:");
+        console.log("************************")
+        console.table(response);
+        console.log("*********************************************")
+        promptUser();
+      });
   };
 
